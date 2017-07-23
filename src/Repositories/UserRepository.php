@@ -34,9 +34,10 @@ class UserRepository
 
     public function insert(array $userData)
     {
-        $statement = $this->connector->getPdo()->prepare('INSERT INTO user (login, password) VALUES(:login, :password)');
+        $statement = $this->connector->getPdo()->prepare('INSERT INTO user (login, password, avatar) VALUES(:login, :password, :avatar)');
         $statement->bindValue(':login', $userData['login']);
         $statement->bindValue(':password', $userData['password']);
+        $statement->bindValue(':avatar', $userData['image']);
 
         return $statement->execute();
     }

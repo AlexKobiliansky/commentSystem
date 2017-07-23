@@ -9,6 +9,8 @@ Class UserEntity
 
     protected $password;
 
+    protected $avatar;
+
     public function setId ($id)
     {
         $this->id = $id;
@@ -31,6 +33,18 @@ Class UserEntity
     public function getLogin ()
     {
         return $this->login;
+    }
+
+    public function setAvatar ($avatar)
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    public function getAvatar ()
+    {
+        return $this->avatar;
     }
 
 

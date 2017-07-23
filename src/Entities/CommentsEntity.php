@@ -15,6 +15,8 @@ Class CommentsEntity
 
     protected $user_login;
 
+    protected $user_avatar;
+
 
     public function setId ($id)
     {
@@ -87,6 +89,18 @@ Class CommentsEntity
     public function getUserLogin ()
     {
         return $this->user_login;
+    }
+
+    public function setUserAvatar ($user_avatar)
+    {
+        $this->user_avatar = $user_avatar;
+
+        return $this;
+    }
+
+    public function getUserAvatar ()
+    {
+        return $this->user_avatar;
     }
 }
 

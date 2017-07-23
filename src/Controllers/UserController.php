@@ -50,9 +50,16 @@ class UserController
                     ]);
             }
 
+        $ext = array_pop(explode('.',$_FILES['myfile']['name'])); // extension
+        $filename = time().'.'.$ext; // new name with extension
+
+        $full_path = $_SERVER['DOCUMENT_ROOT'].'/web/avatars/'.$filename;
+        move_uploaded_file($_FILES['myfile']['tmp_name'], $full_path);
+
             $this->repository->insert([
-                    'login' => $login,
+                    'login'    => $login,
                     'password' => md5($password),
+                    'image'    => $filename,
                 ]);
 
             $user = $this->repository->find($login);

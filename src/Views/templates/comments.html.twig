@@ -3,6 +3,11 @@
 {% block content %}
 {% for comment in comments %}
     <section class="comment">
+        {% if not comment.UserAvatar %}
+            <img src='/web/avatars/no_avatar.jpg'>
+        {% else %}
+            <img src='/web/avatars/{{ comment.UserAvatar }}'>
+        {% endif %}
         <div class="comment-header">
             <p>
                 <span id="login">{{ comment.UserLogin }}</span>

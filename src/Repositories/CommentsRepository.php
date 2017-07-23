@@ -22,7 +22,7 @@ class CommentsRepository
 
     public function findAll($limit = 1000, $offset = 0)
     {
-        $statement = $this->connector->getPdo()->prepare('SELECT c.id, c.content, c.user_id, u.login FROM comments c INNER JOIN user u ON u.id = c.user_id LIMIT :limit OFFSET :offset');
+        $statement = $this->connector->getPdo()->prepare('SELECT c.id, c.content, c.user_id, u.login, u.avatar FROM comments c INNER JOIN user u ON u.id = c.user_id LIMIT :limit OFFSET :offset');
         $statement->bindValue(':limit', (int) $limit, \PDO::PARAM_INT);
         $statement->bindValue(':offset', (int) $offset, \PDO::PARAM_INT);
         $statement->execute();
@@ -41,6 +41,7 @@ class CommentsRepository
                 $object->setContent($result['content']);
                 $object->setUserId($result['user_id']);
                 $object->setUserLogin($result['login']);
+                $object->setUserAvatar($result['avatar']);
 
 
         }
