@@ -2,6 +2,10 @@
 require_once ('autoloader.php');
 require_once __DIR__ . '/configuration.php';
 
+session_start();
+
+\Controllers\SecurityController::checkAuthAction();
+
 $controllerName = isset($_GET['controller']) ? $_GET['controller'] :'comments';
 $controllerName = ucfirst($controllerName) . 'Controller';
 $controllerName = 'Controllers\\' . $controllerName;
