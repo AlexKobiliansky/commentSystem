@@ -1,8 +1,6 @@
 <?php
 namespace Repositories;
 
-
-
 class UserRepository
 {
     private $connector;
@@ -15,13 +13,11 @@ class UserRepository
     public function __construct($connector)
     {
         $this->connector = $connector;
-
     }
 
 
     public function fetchUserData($statement)
     {
-
         $results = [];
 
         while ($result = $statement->fetch()) {
@@ -38,21 +34,39 @@ class UserRepository
 
     public function insert(array $userData)
     {
-        $statement = $this->connector->getPdo()->prepare('INSERT INTO user (login) VALUES(:login)');
+        $statement = $this->connector->getPdo()->prepare('INSERT INTO user (login, password) VALUES(:login, :password)');
         $statement->bindValue(':login', $userData['login']);
+        $statement->bindValue(':password', $userData['password']);
 
         return $statement->execute();
     }
 
+
     public function find($login)
     {
-
         $statement = $this->connector->getPdo()->prepare('SELECT * FROM user WHERE login = :login LIMIT 1');
         $statement->bindValue(':login', (string) $login, \PDO::PARAM_STR);
         $statement->execute();
-        $UserData = $this->fetchUserData($statement);
+        $userData = $this->fetchUserData($statement);
 
-        return $UserData[0];
+        if (!isset($userData[0]))
+            return false;
 
+        return $userData[0];
+    }
+
+
+    public function authentificate(array $userData)
+    {
+        $statement = $this->connector->getPdo()->prepare('SELECT * FROM user WHERE login = :login AND password = :password LIMIT 1');
+        $statement->bindValue(':login', (string) $userData['login'], \PDO::PARAM_STR);
+        $statement->bindValue(':password', (string) $userData['password'], \PDO::PARAM_STR);
+        $statement->execute();
+        $userData = $this->fetchUserData($statement);
+
+        if (!isset($userData[0]))
+            return false;
+
+        return $userData[0];
     }
 }
