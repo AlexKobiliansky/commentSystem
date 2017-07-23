@@ -69,4 +69,38 @@ class UserRepository
 
         return $userData[0];
     }
+
+    public function checkRegisterData($login, $password, $confirmPassword)
+    {
+        if (empty($login))
+            return 'Please enter your login';
+
+        elseif (empty($password))
+            return 'Please enter your password';
+
+        elseif (empty($confirmPassword) || ($password !== $confirmPassword))
+            return 'Mismatch passwords. Please check and try again';
+
+        else {
+            if (!preg_match("/^[a-zа-яё\d]{1,}$/i", $login))
+                return 'You login may consist only alphabetic and numeric characters without spaces ';
+
+            elseif (!preg_match("/^[a-zа-яё\d]{1,}$/i", $password))
+                return 'You password may consist only alphabetic and numeric characters without spaces ';
+            else
+                return true;
+            }
+    }
+
+    public function checkAuthData($login, $password)
+    {
+        if (empty($login))
+            return 'Please enter your login';
+
+        elseif (empty($password))
+            return 'Please enter your password';
+        else
+            return true;
+
+    }
 }

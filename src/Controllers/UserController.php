@@ -30,6 +30,7 @@ class UserController
         ));
     }
 
+
     public function newAction()
     {
 
@@ -37,44 +38,22 @@ class UserController
         $password = htmlspecialchars(trim($_POST['password']));
         $confirmPassword = htmlspecialchars(trim($_POST['confirmPassword']));
 
+        if($this->repository->checkRegisterData($login, $password, $confirmPassword) !== true) {
+            return $this->twig->render('registration.html.twig', [
+                'message' => $this->repository->checkRegisterData($login, $password, $confirmPassword),
+            ]);
+        }
 
-        if (empty($login)) {
+        if (($this->repository->find($login)) !== false) {
             return $this->twig->render('registration.html.twig', [
-                    'message' => 'Please enter your login',
-                ]);
-        } elseif (empty($password)) {
-            return $this->twig->render('registration.html.twig', [
-                    'message' => 'Please enter your passsword',
-                ]);
-        } elseif (empty($confirmPassword) || ($password !== $confirmPassword)) {
-            return $this->twig->render('registration.html.twig', [
-                    'message' => 'Mismatch passwords. Please check and try again',
-                ]);
-        } else {
-            if (!preg_match("/^[a-zа-яё\d]{1,}$/i", $login)) {
-                return $this->twig->render('registration.html.twig', [
-                    'message' => 'You login may consist only alphabetic and numeric characters without spaces ',
-                ]);
-            }
-            elseif (!preg_match("/^[a-zа-яё\d]{1,}$/i", $password)) {
-                return $this->twig->render('registration.html.twig', [
-                    'message' => 'You password may consist only alphabetic and numeric characters without spaces ',
-                ]);
+                'message' => 'User with such login already exists. Please try again',
+                    ]);
             }
 
-            if (($this->repository->find($login)) !== false) {
-                return $this->twig->render('registration.html.twig', [
-                        'message' => 'User with such login already exists. Please try again',
-                    ]
-                );
-            }
-
-            $this->repository->insert(
-                [
+            $this->repository->insert([
                     'login' => $login,
-                    'password' => $password,
-                ]
-            );
+                    'password' => md5($password),
+                ]);
 
             $user = $this->repository->find($login);
 
@@ -86,41 +65,38 @@ class UserController
             ]);
         }
 
-    }
 
     public function loginAction()
     {
-        if (empty($_POST['login'])) {
-            return $this->twig->render('authorization.html.twig', [
-                'message' => 'Please enter your login',
-                ]);
-        } elseif (empty($_POST['password'])) {
-            return $this->twig->render('authorization.html.twig', [
-                    'message' => 'Please enter your password',
-                ]);
-        } else {
+        $login = htmlspecialchars(trim($_POST['login']));
+        $password = htmlspecialchars(trim($_POST['password']));
 
-            $user = $this->repository->authentificate([
-                'login'    => $_POST['login'],
-                'password' => $_POST['password']
+        if($this->repository->checkAuthData($login, $password) !== true) {
+            return $this->twig->render('authorization.html.twig', [
+                'message' => $this->repository->checkAuthData($login, $password),
             ]);
-
-            if ($user === false) {
-                return $this->twig->render('authorization.html.twig', [
-                        'message' => 'Cannot find User with such login and password. Please check credentials',
-                    ]
-                );
-            } else {
-                $_SESSION['user_id'] = $user->getId();
-
-                $comments = $this->commentsRepository->findAll();
-                return $this->twig->render('comments.html.twig', [
-                    'comments' => $comments,
-                ]);
-            }
         }
 
+        $user = $this->repository->authentificate([
+            'login'    => $login,
+            'password' => md5($password),
+        ]);
+
+        if ($user === false) {
+            return $this->twig->render('authorization.html.twig', [
+                'message' => 'Cannot find User with such login and password. Please check credentials',
+            ]);
+        }
+
+        $_SESSION['user_id'] = $user->getId();
+        $comments = $this->commentsRepository->findAll();
+
+        return $this->twig->render('comments.html.twig', [
+                    'comments' => $comments,
+                    'current_user' => $_SESSION['user_id'],
+            ]);
     }
+
 
     public function logoutAction()
     {
