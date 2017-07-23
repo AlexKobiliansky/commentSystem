@@ -33,24 +33,36 @@ class UserController
     public function newAction()
     {
 
-        if (empty($_POST['login'])) {
+        $login = htmlspecialchars(trim($_POST['login']));
+        $password = htmlspecialchars(trim($_POST['password']));
+        $confirmPassword = htmlspecialchars(trim($_POST['confirmPassword']));
+
+
+        if (empty($login)) {
             return $this->twig->render('registration.html.twig', [
                     'message' => 'Please enter your login',
-                ]
-            );
-        } elseif (empty($_POST['password'])) {
+                ]);
+        } elseif (empty($password)) {
             return $this->twig->render('registration.html.twig', [
                     'message' => 'Please enter your passsword',
-                ]
-            );
-        } elseif (empty($_POST['confirmPassword']) || ($_POST['password'] !== $_POST['confirmPassword'])) {
+                ]);
+        } elseif (empty($confirmPassword) || ($password !== $confirmPassword)) {
             return $this->twig->render('registration.html.twig', [
                     'message' => 'Mismatch passwords. Please check and try again',
-                ]
-            );
+                ]);
         } else {
+            if (!preg_match("/^[a-zа-яё\d]{1,}$/i", $login)) {
+                return $this->twig->render('registration.html.twig', [
+                    'message' => 'You login may consist only alphabetic and numeric characters without spaces ',
+                ]);
+            }
+            elseif (!preg_match("/^[a-zа-яё\d]{1,}$/i", $password)) {
+                return $this->twig->render('registration.html.twig', [
+                    'message' => 'You password may consist only alphabetic and numeric characters without spaces ',
+                ]);
+            }
 
-            if (($this->repository->find($_POST['login'])) !== false) {
+            if (($this->repository->find($login)) !== false) {
                 return $this->twig->render('registration.html.twig', [
                         'message' => 'User with such login already exists. Please try again',
                     ]
@@ -59,12 +71,12 @@ class UserController
 
             $this->repository->insert(
                 [
-                    'login' => $_POST['login'],
-                    'password' => $_POST['password'],
+                    'login' => $login,
+                    'password' => $password,
                 ]
             );
 
-            $user = $this->repository->find($_POST['login']);
+            $user = $this->repository->find($login);
 
             $_SESSION['user_id'] = $user->getId();
 
@@ -74,10 +86,6 @@ class UserController
             ]);
         }
 
-        return $this->twig->render('registration.html.twig', [
-                'message' => 'You comment is empty. Please type something and try again',
-            ]
-        );
     }
 
     public function loginAction()
@@ -88,7 +96,7 @@ class UserController
                 ]);
         } elseif (empty($_POST['password'])) {
             return $this->twig->render('authorization.html.twig', [
-                    'message' => 'Please enter your passsword',
+                    'message' => 'Please enter your password',
                 ]);
         } else {
 
