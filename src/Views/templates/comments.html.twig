@@ -2,15 +2,29 @@
 
 {% block content %}
 {% for comment in comments %}
-    <div>
-        {{ comment.content }}
-        {{ comment.id }}
-        {%  if comment.UserId == current_user  %}
-            <a href="/index.php?controller=comments&action=delete&id={{ comment.id }}&login={{ comment.UserLogin }}">delete</a>
-            <a href="/index.php?controller=comments&action=edit&id={{ comment.id }}">update</a>
-        {%  endif  %}
-        {{ comment.UserLogin }}
-    </div>
+    <section class="comment">
+        <div class="comment-header">
+            <p>
+                <span id="login">{{ comment.UserLogin }}</span>
+                <span id="date">{{ comment.dateCreated|date('j.m.Y, G:i') }}</span>
+                {% if comment.UserId == current_user %}
+                    <a href="/index.php?controller=comments&action=delete&id={{ comment.id }}&login={{ comment.UserLogin }}">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a>
+                    <a href="/index.php?controller=comments&action=edit&id={{ comment.id }}">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </a>
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="comment-content">
+            <p>
+                {{ comment.content }}
+            </p>
+        </div>
+
+    </section>
 {% endfor %}
     <h1>Add new Comment</h1>
     {{ message }}

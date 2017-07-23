@@ -1,18 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
+    {% block stylesheets %}
+        <link href ="/web/css/bootstrap.min.css" rel="stylesheet" />
+        <link href ="/web/css/style.css" rel="stylesheet" />
+
+
+    {% endblock %}
     {% block head %}
-        <title>{% block title %}Comments Board{% endblock %}</title>
+        <title>Comments Board</title>
     {% endblock %}
 </head>
 <body>
-    {% block menu %}
-        <div class="menu">
-            <a href="/index.php?controller=user&action=logout">Logout</a>
-        </div>
-    {% endblock %}
 
-    {% block content %}
+    <div class="row">
+        <div class="col-sm-3">
+            {% block leftside %}
+            {% endblock %}
+        </div>
+
+        <div class="col-sm-6">
+            {% block menu %}
+            <nav class="navbar navbar-default">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/index.php?controller=user&action=logout">Logout</a></li>
+
+                </ul>
+            </nav>
+
+            {% endblock %}
+            {% block content %}
+            {% endblock %}
+        </div>
+
+        <div class="col-sm-3">
+            {% block rightside %}
+            {% endblock %}
+        </div>
+    </div>
+
+    {% block javascripts %}
+        <script src="/web/js/bootstrap.min.js"></script>
+        <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
     {% endblock %}
 </body>
 </html>

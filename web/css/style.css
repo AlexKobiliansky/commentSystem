@@ -1,0 +1,7 @@
+.comment {padding: 20px; border-top: 1px dotted #ccc}
+.comment .comment-header {padding: 5px; border-bottom: 1px dotted #ccc; overflow: hidden}
+.comment .comment-content {padding: 20px 0 0 0; margin-left:68px}
+.comment #login {font-weight:bold}
+.comment #date {font-size: 0.8em; margin-left: 10px; color: #999999}
+.comment .button{margin:10px 0 0  68px;}
+.glyphicon {float:right; font-size: 16px; margin:0 0 0 10px; color: #1b6d85 }
