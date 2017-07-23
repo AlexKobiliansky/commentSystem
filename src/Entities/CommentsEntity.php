@@ -11,6 +11,10 @@ Class CommentsEntity
 
     protected $date_updated;
 
+    protected $user_id;
+
+    protected $user_login;
+
 
     public function setId ($id)
     {
@@ -61,5 +65,28 @@ Class CommentsEntity
         return $this->date_updated;
     }
 
+    public function setUserId ($user_id)
+    {
+        $this->user_id = $user_id;
+
+        return $this;
+    }
+
+    public function getUserId ()
+    {
+        return $this->user_id;
+    }
+
+    public function setUserLogin ($user_login)
+    {
+        $this->user_login = $user_login;
+
+        return $this;
+    }
+
+    public function getUserLogin ()
+    {
+        return $this->user_login;
+    }
 }
 

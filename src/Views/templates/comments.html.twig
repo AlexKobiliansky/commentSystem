@@ -4,20 +4,19 @@
 {% for comment in comments %}
     <div>
         {{ comment.content }}
-        <a href="/index.php?controller=comments&action=delete&id={{ comment.id }}">delete</a>
-        <a href="/index.php?controller=comments&action=edit&id={{ comment.id }}">update</a>
+        {{ comment.id }}
+        {%  if comment.UserId == current_user  %}
+            <a href="/index.php?controller=comments&action=delete&id={{ comment.id }}&login={{ comment.UserLogin }}">delete</a>
+            <a href="/index.php?controller=comments&action=edit&id={{ comment.id }}">update</a>
+        {%  endif  %}
+        {{ comment.UserLogin }}
     </div>
 {% endfor %}
-
     <h1>Add new Comment</h1>
     {{ message }}
     <form method="POST" action="/index.php?controller=comments&action=new">
-
         <label for="content">Content</label>
         <textarea id="content" name="content"></textarea>
-
         <input type="submit" value="Create">
-
     </form>
-
 {% endblock %}

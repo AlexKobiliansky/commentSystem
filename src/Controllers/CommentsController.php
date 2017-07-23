@@ -3,6 +3,7 @@
 namespace Controllers;
 
 use Repositories\CommentsRepository;
+use Entities\UserEntity;
 
 class CommentsController
 {
@@ -26,12 +27,16 @@ class CommentsController
     {
         $commentsData = $this->repository->findAll();
 
-        return $this->twig->render('comments.html.twig', ['comments' => $commentsData]);
+        return $this->twig->render('comments.html.twig', [
+            'comments' => $commentsData,
+            'current_user' => $_SESSION['user_id'],
+        ]);
     }
 
 
     public function newAction()
     {
+
         if (!empty($_POST['content'])) {
 
             $this->repository->insert(

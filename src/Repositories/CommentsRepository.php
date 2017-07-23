@@ -1,6 +1,7 @@
 <?php
 
 namespace Repositories;
+use Entities\UserEntity;
 
 
 
@@ -21,7 +22,7 @@ class CommentsRepository
 
     public function findAll($limit = 1000, $offset = 0)
     {
-        $statement = $this->connector->getPdo()->prepare('SELECT * FROM comments LIMIT :limit OFFSET :offset');
+        $statement = $this->connector->getPdo()->prepare('SELECT c.id, c.content, c.user_id, u.login FROM comments c INNER JOIN user u ON u.id = c.user_id LIMIT :limit OFFSET :offset');
         $statement->bindValue(':limit', (int) $limit, \PDO::PARAM_INT);
         $statement->bindValue(':offset', (int) $offset, \PDO::PARAM_INT);
         $statement->execute();
@@ -32,13 +33,14 @@ class CommentsRepository
     {
 
         $results = [];
-
         while ($result = $statement->fetch()) {
 
             $object = new \Entities\CommentsEntity;
             $results[] =
                 $object->setId($result['id']);
                 $object->setContent($result['content']);
+                $object->setUserId($result['user_id']);
+                $object->setUserLogin($result['login']);
 
 
         }
@@ -48,7 +50,7 @@ class CommentsRepository
 
     public function find($id)
     {
-        $statement = $this->connector->getPdo()->prepare('SELECT * FROM comments WHERE id = :id LIMIT 1');
+        $statement = $this->connector->getPdo()->prepare('SELECT c.id, c.content, c.user_id, u.login FROM comments c INNER JOIN user u ON u.id = c.user_id WHERE c.id = :id LIMIT 1');
         $statement->bindValue(':id', (int) $id, \PDO::PARAM_INT);
         $statement->execute();
         $commentsData = $this->fetchCommentsData($statement);
@@ -59,8 +61,9 @@ class CommentsRepository
 
     public function insert(array $commentsData)
     {
-        $statement = $this->connector->getPdo()->prepare('INSERT INTO comments (content) VALUES(:content)');
+        $statement = $this->connector->getPdo()->prepare('INSERT INTO comments (content, user_id) VALUES(:content, :userId)');
         $statement->bindValue(':content', $commentsData['content']);
+        $statement->bindValue(':userId', (int) $_SESSION['user_id'], \PDO::PARAM_INT);
 
         return $statement->execute();
     }
