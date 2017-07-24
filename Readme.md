@@ -1,0 +1,1 @@
+To create projects database use soft_group.sql (in root directory)
