@@ -1,5 +1,5 @@
 <?php
-require_once ('autoloader.php');
+require_once('autoloader.php');
 require_once __DIR__ . '/configuration.php';
 
 session_start();
@@ -26,8 +26,9 @@ $actionName = isset($_GET['action']) ? $_GET['action'] : 'index';
 $actionName = $actionName . 'Action';
 
 $security = new \Controllers\SecurityController($connector);
-if (!$security->checkAvailableAction($controllerName, $actionName))
+if (!$security->checkAvailableAction($controllerName, $actionName)) {
     $security->checkAuthAction();
+}
 
 $response = $controller->$actionName();
 

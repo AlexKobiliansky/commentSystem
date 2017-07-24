@@ -1,9 +1,6 @@
 <?php
 
 namespace Repositories;
-use Entities\UserEntity;
-
-
 
 class CommentsRepository
 {
@@ -17,7 +14,6 @@ class CommentsRepository
     public function __construct($connector)
     {
         $this->connector = $connector;
-
     }
 
     public function findAll($limit = 1000, $offset = 0)
@@ -32,65 +28,60 @@ class CommentsRepository
 
     public function fetchCommentsData($statement)
     {
-
         $results = [];
         while ($result = $statement->fetch()) {
-
             $object = new \Entities\CommentsEntity;
-            //
-            $children = $this->connector->getPdo()->prepare('SELECT c.id, c.content, c.user_id, u.login, u.avatar, c.parent, c.likes 
+
+            $children = $this->connector->getPdo()->prepare('SELECT c.id, c.content, c.user_id, u.login, u.avatar, c.parent, c.likes, c.date_created 
                 FROM comments c INNER JOIN user u ON u.id = c.user_id AND c.parent = :parent');
             $children->bindValue(':parent', (int) $result['id'], \PDO::PARAM_INT);
             $children->execute();
-            //
+
             $results[] =
                 $object->setId($result['id']);
-                $object->setContent($result['content']);
-                $object->setUserId($result['user_id']);
-                $object->setUserLogin($result['login']);
-                $object->setUserAvatar($result['avatar']);
-                $object->setParent($result['parent']);
-                $object->setLikes($result['likes']);
-                $object->setDateCreated($result['date_created']);
+            $object->setContent($result['content']);
+            $object->setUserId($result['user_id']);
+            $object->setUserLogin($result['login']);
+            $object->setUserAvatar($result['avatar']);
+            $object->setParent($result['parent']);
+            $object->setLikes($result['likes']);
+            $object->setDateCreated($result['date_created']);
 
+            while ($child = $children->fetch()) {
+                $childObject = new \Entities\CommentsEntity;
 
-                while ($child = $children->fetch()){
-                    $childObject = new \Entities\CommentsEntity;
-
-                    $children1 = $this->connector->getPdo()->prepare('SELECT c.id, c.content, c.user_id, u.login, u.avatar, c.parent, c.likes 
+                $children1 = $this->connector->getPdo()->prepare('SELECT c.id, c.content, c.user_id, u.login, u.avatar, c.parent, c.likes, c.date_created 
                         FROM comments c INNER JOIN user u ON u.id = c.user_id AND c.parent = :parent');
-                    $children1->bindValue(':parent', (int) $child['id'], \PDO::PARAM_INT);
-                    $children1->execute();
+                $children1->bindValue(':parent', (int) $child['id'], \PDO::PARAM_INT);
+                $children1->execute();
 
+                $childObject->setId($child['id']);
+                $childObject->setContent($child['content']);
+                $childObject->setUserId($child['user_id']);
+                $childObject->setUserLogin($child['login']);
+                $childObject->setUserAvatar($child['avatar']);
+                $childObject->setParent($child['parent']);
+                $childObject->setLikes($child['likes']);
+                $childObject->setDateCreated($child['date_created']);
 
-                    $childObject->setId($child['id']);
-                    $childObject->setContent($child['content']);
-                    $childObject->setUserId($child['user_id']);
-                    $childObject->setUserLogin($child['login']);
-                    $childObject->setUserAvatar($child['avatar']);
-                    $childObject->setParent($child['parent']);
-                    $childObject->setLikes($result['likes']);
+                while ($child1 = $children1->fetch()) {
+                    $childObject1 = new \Entities\CommentsEntity;
 
-                    while ($child1 = $children1->fetch()) {
-                        $childObject1 = new \Entities\CommentsEntity;
+                    $childObject1->setId($child1['id']);
+                    $childObject1->setContent($child1['content']);
+                    $childObject1->setUserId($child1['user_id']);
+                    $childObject1->setUserLogin($child1['login']);
+                    $childObject1->setUserAvatar($child1['avatar']);
+                    $childObject1->setParent($child1['parent']);
+                    $childObject1->setLikes($child1['likes']);
+                    $childObject1->setDateCreated($child1['date_created']);
 
-                        $childObject1->setId($child['id']);
-                        $childObject1->setContent($child['content']);
-                        $childObject1->setUserId($child['user_id']);
-                        $childObject1->setUserLogin($child['login']);
-                        $childObject1->setUserAvatar($child['avatar']);
-                        $childObject1->setParent($child['parent']);
-                        $childObject1->setLikes($result['likes']);
-
-                        $childObject->addChild($childObject1);
-                    }
-
-                    $object->addChild($childObject);
+                    $childObject->addChild($childObject1);
                 }
 
+                $object->addChild($childObject);
+            }
         }
-
-
 
         return $results;
     }
@@ -104,7 +95,6 @@ class CommentsRepository
         $commentsData = $this->fetchCommentsData($statement);
 
         return $commentsData[0];
-
     }
 
     public function insert(array $commentsData)
@@ -114,14 +104,12 @@ class CommentsRepository
         $statement->bindValue(':userId', (int) $_SESSION['user_id'], \PDO::PARAM_INT);
         $statement->bindValue(':likes', (int) $commentsData['likes'], \PDO::PARAM_INT);
 
-
         return $statement->execute();
     }
 
     public function update(array $commentsData)
     {
         $statement = $this->connector->getPdo()->prepare("UPDATE comments SET content = :content, likes = :likes WHERE id = :id");
-
         $statement->bindValue(':content', $commentsData['content'], \PDO::PARAM_STR);
         $statement->bindValue(':id', $commentsData['id'], \PDO::PARAM_INT);
         $statement->bindValue(':likes', $commentsData['likes'], \PDO::PARAM_INT);
@@ -139,10 +127,11 @@ class CommentsRepository
 
     public function createSubcomment(array $commentsData)
     {
-        $statement = $this->connector->getPdo()->prepare('INSERT INTO comments (content, user_id, parent) VALUES(:content, :userId, :parent)');
+        $statement = $this->connector->getPdo()->prepare('INSERT INTO comments (content, user_id, parent, date_created, likes) VALUES(:content, :userId, :parent, NOW(), :likes)');
         $statement->bindValue(':content', $commentsData['content']);
         $statement->bindValue(':userId', (int) $_SESSION['user_id'], \PDO::PARAM_INT);
         $statement->bindValue(':parent', (int) $commentsData['parent_id'], \PDO::PARAM_INT);
+        $statement->bindValue(':likes', (int) $commentsData['likes'], \PDO::PARAM_INT);
 
         return $statement->execute();
     }
@@ -161,16 +150,13 @@ class CommentsRepository
             $statement->execute();
 
             return false;
-        }
-        else {
+        } else {
             $statement = $this->connector->getPdo()->prepare("INSERT INTO likes (comment_id, user_id) VALUES (:commentId, :userId)");
-        $statement->bindValue(':commentId', (int) $data['comment_id'], \PDO::PARAM_INT);
-        $statement->bindValue(':userId', (int) $data['user_id'], \PDO::PARAM_INT);
-        $statement->execute();
+            $statement->bindValue(':commentId', (int) $data['comment_id'], \PDO::PARAM_INT);
+            $statement->bindValue(':userId', (int) $data['user_id'], \PDO::PARAM_INT);
+            $statement->execute();
 
-        return true;
+            return true;
         }
-
     }
-
 }

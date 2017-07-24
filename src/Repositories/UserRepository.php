@@ -15,22 +15,19 @@ class UserRepository
         $this->connector = $connector;
     }
 
-
     public function fetchUserData($statement)
     {
         $results = [];
 
         while ($result = $statement->fetch()) {
-
             $object = new \Entities\UserEntity;
             $results[] =
                 $object->setId($result['id']);
-                $object->setLogin($result['login']);
+            $object->setLogin($result['login']);
         }
 
         return $results;
     }
-
 
     public function insert(array $userData)
     {
@@ -42,7 +39,6 @@ class UserRepository
         return $statement->execute();
     }
 
-
     public function find($login)
     {
         $statement = $this->connector->getPdo()->prepare('SELECT * FROM user WHERE login = :login LIMIT 1');
@@ -50,12 +46,12 @@ class UserRepository
         $statement->execute();
         $userData = $this->fetchUserData($statement);
 
-        if (!isset($userData[0]))
+        if (!isset($userData[0])) {
             return false;
+        }
 
         return $userData[0];
     }
-
 
     public function authentificate(array $userData)
     {
@@ -65,43 +61,40 @@ class UserRepository
         $statement->execute();
         $userData = $this->fetchUserData($statement);
 
-        if (!isset($userData[0]))
+        if (!isset($userData[0])) {
             return false;
+        }
 
         return $userData[0];
     }
 
     public function checkRegisterData($login, $password, $confirmPassword)
     {
-        if (empty($login))
+        if (empty($login)) {
             return 'Please enter your login';
-
-        elseif (empty($password))
+        } elseif (empty($password)) {
             return 'Please enter your password';
-
-        elseif (empty($confirmPassword) || ($password !== $confirmPassword))
+        } elseif (empty($confirmPassword) || ($password !== $confirmPassword)) {
             return 'Mismatch passwords. Please check and try again';
-
-        else {
-            if (!preg_match("/^[a-zа-яё\d]{1,}$/i", $login))
+        } else {
+            if (!preg_match("/^[a-zа-яё\d]{1,}$/i", $login)) {
                 return 'You login may consist only alphabetic and numeric characters without spaces ';
-
-            elseif (!preg_match("/^[a-zа-яё\d]{1,}$/i", $password))
+            } elseif (!preg_match("/^[a-zа-яё\d]{1,}$/i", $password)) {
                 return 'You password may consist only alphabetic and numeric characters without spaces ';
-            else
+            } else {
                 return true;
             }
+        }
     }
 
     public function checkAuthData($login, $password)
     {
-        if (empty($login))
+        if (empty($login)) {
             return 'Please enter your login';
-
-        elseif (empty($password))
+        } elseif (empty($password)) {
             return 'Please enter your password';
-        else
+        } else {
             return true;
-
+        }
     }
 }

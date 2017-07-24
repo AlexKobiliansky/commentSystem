@@ -2,9 +2,9 @@
 
 namespace Repositories;
 
-    class Connector
-    {
-        private $pdo;
+class Connector
+{
+    private $pdo;
 
         /**
          * Initialize the database connection with sql server via given credentials
@@ -19,12 +19,10 @@ namespace Repositories;
                 return false;
                 throw new Exception('Error connecting to the database');
             }
-
         }
 
-        public function getPdo()
-        {
-            return $this->pdo;
-        }
+    public function getPdo()
+    {
+        return $this->pdo;
     }
-
+}

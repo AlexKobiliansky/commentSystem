@@ -1,7 +1,7 @@
 <?php
 namespace Entities;
 
-Class CommentsEntity
+class CommentsEntity
 {
     protected $id;
 
@@ -23,7 +23,7 @@ Class CommentsEntity
 
     protected $liked_users;
 
-    protected $likes = 0;
+    protected $likes;
 
 
     public function __construct()
@@ -32,109 +32,105 @@ Class CommentsEntity
         $this->liked_users = [];
     }
 
-
-    public function setId ($id)
+    public function setId($id)
     {
         $this->id = $id;
 
         return $this;
     }
 
-    public function getId ()
+    public function getId()
     {
         return $this->id;
     }
 
-
-    public function setContent ($content)
+    public function setContent($content)
     {
         $this->content = $content;
 
         return $this;
     }
 
-    public function getContent ()
+    public function getContent()
     {
         return $this->content;
     }
 
-    public function setDateCreated ($date_created)
+    public function setDateCreated($date_created)
     {
         $this->date_created = $date_created;
 
         return $this;
     }
 
-    public function getDateCreated ()
+    public function getDateCreated()
     {
         return $this->date_created;
     }
 
-    public function setDateUpdated ($date_updated)
+    public function setDateUpdated($date_updated)
     {
         $this->date_updated = $date_updated;
 
         return $this;
     }
 
-    public function getDateUpdated ()
+    public function getDateUpdated()
     {
         return $this->date_updated;
     }
 
-    public function setUserId ($user_id)
+    public function setUserId($user_id)
     {
         $this->user_id = $user_id;
 
         return $this;
     }
 
-    public function getUserId ()
+    public function getUserId()
     {
         return $this->user_id;
     }
 
-    public function setUserLogin ($user_login)
+    public function setUserLogin($user_login)
     {
         $this->user_login = $user_login;
 
         return $this;
     }
 
-    public function getUserLogin ()
+    public function getUserLogin()
     {
         return $this->user_login;
     }
 
-    public function setUserAvatar ($user_avatar)
+    public function setUserAvatar($user_avatar)
     {
         $this->user_avatar = $user_avatar;
 
         return $this;
     }
 
-    public function getUserAvatar ()
+    public function getUserAvatar()
     {
         return $this->user_avatar;
     }
 
-    public function setParent ($parent)
+    public function setParent($parent)
     {
         $this->parent = $parent;
 
         return $this;
     }
 
-    public function getParent ()
+    public function getParent()
     {
         return $this->parent;
     }
 
     public function addChild($child)
     {
-
         $this->children[] = $child;
-
 
         return $this;
     }
@@ -156,9 +152,7 @@ Class CommentsEntity
 
     public function addLikedUser($liked_user)
     {
-
         $this->liked_users[] = $liked_user;
-
 
         return $this;
     }
@@ -168,4 +162,3 @@ Class CommentsEntity
         return $this->liked_users;
     }
 }
-

@@ -1,10 +1,8 @@
 <?php
 namespace Controllers;
 
-use Controllers\CommentsController;
 use Repositories\UserRepository;
 use Repositories\CommentsRepository;
-
 
 class UserController
 {
@@ -33,12 +31,11 @@ class UserController
 
     public function newAction()
     {
-
         $login = htmlspecialchars(trim($_POST['login']));
         $password = htmlspecialchars(trim($_POST['password']));
         $confirmPassword = htmlspecialchars(trim($_POST['confirmPassword']));
 
-        if($this->repository->checkRegisterData($login, $password, $confirmPassword) !== true) {
+        if ($this->repository->checkRegisterData($login, $password, $confirmPassword) !== true) {
             return $this->twig->render('registration.html.twig', [
                 'message' => $this->repository->checkRegisterData($login, $password, $confirmPassword),
             ]);
@@ -47,38 +44,38 @@ class UserController
         if (($this->repository->find($login)) !== false) {
             return $this->twig->render('registration.html.twig', [
                 'message' => 'User with such login already exists. Please try again',
-                    ]);
-            }
-
-        $ext = array_pop(explode('.',$_FILES['myfile']['name'])); // extension
-        $filename = time().'.'.$ext; // new name with extension
-
-        $full_path = $_SERVER['DOCUMENT_ROOT'].'/web/avatars/'.$filename;
-        move_uploaded_file($_FILES['myfile']['tmp_name'], $full_path);
-
-            $this->repository->insert([
-                    'login'    => $login,
-                    'password' => md5($password),
-                    'image'    => $filename,
-                ]);
-
-            $user = $this->repository->find($login);
-
-            $_SESSION['user_id'] = $user->getId();
-
-            $comments = $this->commentsRepository->findAll();
-            return $this->twig->render('comments.html.twig', [
-                'comments' => $comments,
             ]);
         }
 
+        $ext = array_pop(explode('.', $_FILES['myfile']['name'])); // extension
+        $filename = time().'.'.$ext; // new name with extension
+        $full_path = $_SERVER['DOCUMENT_ROOT'].'/web/avatars/'.$filename;
+
+        if (!move_uploaded_file($_FILES['myfile']['tmp_name'], $full_path)) {
+            $filename = '';
+        }
+
+        $this->repository->insert([
+            'login'    => $login,
+            'password' => md5($password),
+            'image'    => $filename,
+        ]);
+
+        $user = $this->repository->find($login);
+        $_SESSION['user_id'] = $user->getId();
+
+        $comments = $this->commentsRepository->findAll();
+        return $this->twig->render('comments.html.twig', [
+                'comments' => $comments,
+        ]);
+    }
 
     public function loginAction()
     {
         $login = htmlspecialchars(trim($_POST['login']));
         $password = htmlspecialchars(trim($_POST['password']));
 
-        if($this->repository->checkAuthData($login, $password) !== true) {
+        if ($this->repository->checkAuthData($login, $password) !== true) {
             return $this->twig->render('authorization.html.twig', [
                 'message' => $this->repository->checkAuthData($login, $password),
             ]);
@@ -99,11 +96,10 @@ class UserController
         $comments = $this->commentsRepository->findAll();
 
         return $this->twig->render('comments.html.twig', [
-                    'comments' => $comments,
-                    'current_user' => $_SESSION['user_id'],
-            ]);
+            'comments' => $comments,
+            'current_user' => $_SESSION['user_id'],
+        ]);
     }
-
 
     public function logoutAction()
     {
