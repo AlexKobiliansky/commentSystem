@@ -41,6 +41,11 @@
                     Likes: {{ comment.likes }}
                     <a href="/index.php?controller=comments&action=like&id={{ comment.id }}">test</a>
 
+
+
+
+                    <span class="glyphicon glyphicon-heart" id="like_hart{{ comment.id }}" style="color:lightblue"></span>
+
                     <span style="cursor: pointer;" id="like{{ comment.id }}" data-id="{{ comment.id }}" >
                     {{ comment.likes }}
                 </span>
@@ -86,8 +91,9 @@
                     dataType: "text",
                     success: function(result) {
                         if (result) {
-
-                            $("#like"+{{ comment.id }}).text(result);
+                            var res = JSON.parse(result);
+                            $("#like"+{{ comment.id }}).text(res[0]);
+                            $("#like_hart"+{{ comment.id }}).css('color', res[1]);
 
                         }
                         else $("#like"+{{ comment.id }}).text('?');

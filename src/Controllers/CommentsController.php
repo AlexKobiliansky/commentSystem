@@ -125,11 +125,14 @@ class CommentsController
     if ($this->repository->checkCounter([
         'comment_id' => $_GET['id'],
         'user_id'    =>$_SESSION['user_id'],
-    ]))
+    ])) {
         $likes = $comment->getLikes()+1;
-    else
+        $color = 'steeltblue';
+    }
+    else {
         $likes = $comment->getLikes()-1;
-
+        $color= 'lightblue';
+    }
     $this->repository->update([
             'content' => $comment->getContent(),
             'id'      => (int) $_GET['id'],
@@ -137,7 +140,7 @@ class CommentsController
         ]
     );
 
-        return $likes;
+        return json_encode([$likes, $color]);
     }
 
 }
