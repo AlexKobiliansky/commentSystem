@@ -7,6 +7,15 @@
 
 
     {% endblock %}
+
+
+    {% block javascripts %}
+        <script src="/web/js/bootstrap.min.js"></script>
+        <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
+    {% endblock %}
+
+
+
     {% block head %}
         <title>Comments Board</title>
     {% endblock %}
@@ -39,9 +48,6 @@
         </div>
     </div>
 
-    {% block javascripts %}
-        <script src="/web/js/bootstrap.min.js"></script>
-        <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
-    {% endblock %}
+
 </body>
 </html>

@@ -17,6 +17,18 @@ Class CommentsEntity
 
     protected $user_avatar;
 
+    protected $parent;
+
+    protected $children;
+
+    protected $likes = 0;
+
+
+    public function __construct()
+    {
+        $this->children = [];
+    }
+
 
     public function setId ($id)
     {
@@ -101,6 +113,42 @@ Class CommentsEntity
     public function getUserAvatar ()
     {
         return $this->user_avatar;
+    }
+
+    public function setParent ($parent)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    public function getParent ()
+    {
+        return $this->parent;
+    }
+
+    public function addChild($child)
+    {
+
+        $this->children[] = $child;
+
+
+        return $this;
+    }
+
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    public function setLikes($likes)
+    {
+        $this->likes = $likes;
+    }
+
+    public function getLikes()
+    {
+        return $this->likes;
     }
 }
 

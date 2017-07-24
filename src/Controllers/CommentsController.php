@@ -26,7 +26,7 @@ class CommentsController
     public function indexAction()
     {
         $commentsData = $this->repository->findAll();
-
+//var_dump($commentsData); die();
         return $this->twig->render('comments.html.twig', [
             'comments' => $commentsData,
             'current_user' => $_SESSION['user_id'],
@@ -42,6 +42,7 @@ class CommentsController
             $this->repository->insert(
                 [
                     'content' => $_POST['content'],
+                    'likes'   => 0,
                 ]
             );
             return $this->indexAction();
@@ -58,10 +59,14 @@ class CommentsController
         {
             if (isset($_POST['content'])) {
 
+                $comment = $this->repository->find($_GET['id']);
+                $likes = $comment->getLikes();
+
                 $this->repository->update(
                     [
                         'content' => $_POST['content'],
                         'id'      => (int) $_GET['id'],
+                        'likes'   => $likes
                     ]
                 );
                 return $this->indexAction();
@@ -87,4 +92,45 @@ class CommentsController
 
             return $this->twig->render('comments.html.twig');
         }
+
+
+        public function createSubcommentAction()
+        {
+
+            if (!empty($_POST['content'])) {
+
+            $this->repository->createSubcomment(
+                [
+                    'content'   => $_POST['content'],
+                    'parent_id' => $_GET['parent_id'],
+                ]
+            );
+            return $this->indexAction();
+        }
+
+        return $this->twig->render('comments.html.twig',
+            [
+                'message' => 'You comment is empty. Please type something and try again',
+            ]);
+        }
+
+
+
+
+    public function likeAction()
+    {
+
+    $comment = $this->repository->find($_GET['id']);
+    $likes = $comment->getLikes()+1;
+
+    $this->repository->update([
+            'content' => $comment->getContent(),
+            'id'      => (int) $_GET['id'],
+            'likes'   => $likes
+        ]
+    );
+
+        return $likes;
+    }
+
 }

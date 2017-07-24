@@ -6,3 +6,6 @@
 .comment .button{margin:10px 0 0  68px;}
 .comment img{float: left; width: 50px; padding: 3px; border: 1px solid #ccc; margin: 0 10px 10px 0 }
 .glyphicon {float:right; font-size: 16px; margin:0 0 0 10px; color: #1b6d85 }
+
+.subcomment{margin-left: 100px}
+.subcomment > .comment{padding: 20px 20px 20px 0}
