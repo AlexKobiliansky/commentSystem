@@ -22,7 +22,7 @@ class CommentsRepository
 
     public function findAll($limit = 1000, $offset = 0)
     {
-        $statement = $this->connector->getPdo()->prepare('SELECT c.id, c.content, c.user_id, u.login, u.avatar, c.parent, c.likes 
+        $statement = $this->connector->getPdo()->prepare('SELECT c.id, c.content, c.user_id, u.login, u.avatar, c.parent, c.likes, c.date_created 
             FROM comments c INNER JOIN user u ON u.id = c.user_id ORDER BY c.id DESC LIMIT :limit OFFSET :offset');
         $statement->bindValue(':limit', (int) $limit, \PDO::PARAM_INT);
         $statement->bindValue(':offset', (int) $offset, \PDO::PARAM_INT);
@@ -51,6 +51,7 @@ class CommentsRepository
                 $object->setUserAvatar($result['avatar']);
                 $object->setParent($result['parent']);
                 $object->setLikes($result['likes']);
+                $object->setDateCreated($result['date_created']);
 
 
                 while ($child = $children->fetch()){
@@ -96,7 +97,7 @@ class CommentsRepository
 
     public function find($id)
     {
-        $statement = $this->connector->getPdo()->prepare('SELECT c.id, c.content, c.user_id, u.login, u.avatar, c.parent, c.likes
+        $statement = $this->connector->getPdo()->prepare('SELECT c.id, c.content, c.user_id, u.login, u.avatar, c.parent, c.likes, c.date_created
             FROM comments c INNER JOIN user u ON u.id = c.user_id WHERE c.id = :id LIMIT 1');
         $statement->bindValue(':id', (int) $id, \PDO::PARAM_INT);
         $statement->execute();
@@ -108,10 +109,11 @@ class CommentsRepository
 
     public function insert(array $commentsData)
     {
-        $statement = $this->connector->getPdo()->prepare('INSERT INTO comments (content, user_id, likes) VALUES(:content, :userId, :likes)');
+        $statement = $this->connector->getPdo()->prepare('INSERT INTO comments (content, user_id, likes, date_created) VALUES(:content, :userId, :likes, NOW())');
         $statement->bindValue(':content', $commentsData['content']);
         $statement->bindValue(':userId', (int) $_SESSION['user_id'], \PDO::PARAM_INT);
         $statement->bindValue(':likes', (int) $commentsData['likes'], \PDO::PARAM_INT);
+
 
         return $statement->execute();
     }

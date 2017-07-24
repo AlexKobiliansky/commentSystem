@@ -1,20 +1,48 @@
-This is registration page
-{{ message }}
-<form method="POST" action="/index.php?controller=user&action=new" enctype="multipart/form-data">
+{% extends 'base.html.twig' %}
 
-    <label for="login">Login</label>
-    <input type="text" id="login" name="login">
+{% block content%}
+    <style>
+        .info {text-align:  center;}
+    </style>
+    <div class="info">
+        <h3>This is registration page</h3>
+    </div>
+    {% if message %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
+    {% endif %}
+    <form method="POST" class="form-horizontal" action="/index.php?controller=user&action=new" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="login" class="col-sm-2 control-label">Login</label>
+            <div class="col-sm-10">
+                <input type="text" id="login" name="login" class="form-control" placeholder="Login">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="password" class="col-sm-2 control-label">Password</label>
+            <div class="col-sm-10">
+                <input type="password" id="password" name="password" class="form-control" placeholder="Password">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="confirmPassword" class="col-sm-2 control-label">Confirm Password</label>
+            <div class="col-sm-10">
+                <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Repeat password">
+            </div>
+        </div>
+        <div class="form-group">
+        <input type="hidden" name="MAX_FILE_SIZE" value="3000000" />
+            <div class="col-sm-offset-2 col-sm-10">
+                 <input name="myfile" type="file" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">Register me</button>
+            </div>
+        </div>
+    </form>
+    <a href="/index.php?controller=security&action=authPage&available=true">Sign in</a> if you already have accaunt
 
-    <label for="password">Password</label>
-    <input type="password" id="password" name="password">
-
-    <label for="confirmPassword">Confirm Password</label>
-    <input type="password" id="confirmPassword" name="confirmPassword">
-
-    <input type="hidden" name="MAX_FILE_SIZE" value="3000000" />
-    <input name="myfile" type="file" />
-
-    <input type="submit" value="Register me">
-</form>
-
-<a href="/index.php?controller=security&action=authPage&available=true">Sign in</a> if you already have accaunt
+{% endblock %}

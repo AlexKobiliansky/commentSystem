@@ -1,3 +1,4 @@
+
 .comment {padding: 20px; border-top: 1px dotted #ccc}
 .comment .comment-header {padding: 5px; border-bottom: 1px dotted #ccc; overflow: hidden}
 .comment .comment-content {padding: 20px 0 0 0; margin-left:68px}
@@ -9,3 +10,9 @@
 
 .subcomment{margin-left: 100px}
 .subcomment > .comment{padding: 20px 20px 20px 0}
+#newcomment {margin-bottom: 30px;}
+.counter {float: right; margin:10px 0 1px 10px}
+.likes_counter .glyphicon {font-size: 19px; margin-top: 0; margin-left: 4px}
+
+
+

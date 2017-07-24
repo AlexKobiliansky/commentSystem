@@ -1,14 +1,35 @@
-This is authorization page
-{{ message }}
-<form method="POST" action="/index.php?controller=user&action=login">
+{% extends 'base.html.twig' %}
 
-    <label for="login">Login</label>
-    <input type="text" id="login" name="login">
-
-    <label for="password">Password</label>
-    <input type="password" id="password" name="password">
-
-    <input type="submit" value="Sign in">
-</form>
-
-Click here for <a href="/index.php?controller=security&action=registerPage&available=true">registration</a>
+{% block content%}
+    <style>
+        .info {text-align:  center;}
+    </style>
+    <div class="info">
+        <h3>This is authorization page <br /></h3>
+    </div>
+    {% if message %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
+    {% endif %}
+    <form method="POST" class="form-horizontal" action="/index.php?controller=user&action=login">
+        <div class="form-group">
+            <label for="login" class="col-sm-2 control-label">Login</label>
+            <div class="col-sm-10">
+                <input type="text" id="login" name="login" class="form-control" placeholder="Login">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="password" class="col-sm-2 control-label">Password</label>
+            <div class="col-sm-10">
+                <input type="password" id="password" name="password" class="form-control" placeholder="Password">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">Sign in</button>
+            </div>
+        </div>
+    </form>
+    Click here for <a href="/index.php?controller=security&action=registerPage&available=true">registration</a>
+{% endblock %}

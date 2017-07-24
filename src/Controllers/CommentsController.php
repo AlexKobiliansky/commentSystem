@@ -26,7 +26,7 @@ class CommentsController
     public function indexAction()
     {
         $commentsData = $this->repository->findAll();
-//var_dump($commentsData); die();
+
         return $this->twig->render('comments.html.twig', [
             'comments' => $commentsData,
             'current_user' => $_SESSION['user_id'],
@@ -76,8 +76,9 @@ class CommentsController
 
             return $this->twig->render('comments_form.html.twig',
                 [
-                    'content' => $comment->getContent(),
-                    'id'      => $comment->getId(),
+                    'content'     => $comment->getContent(),
+                    'id'          => $comment->getId(),
+                    'dateCreated' => $comment->getDateCreated(),
                 ]
             );
         }
