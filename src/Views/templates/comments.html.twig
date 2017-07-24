@@ -36,10 +36,12 @@
             <div class="comment-content">
                 <p>
                     {{ comment.content }}<br />
+
+
                     Likes: {{ comment.likes }}
                     <a href="/index.php?controller=comments&action=like&id={{ comment.id }}">test</a>
 
-                    <span style="cursor: pointer;" id="like" data-id="{{ comment.id }}" >
+                    <span style="cursor: pointer;" id="like{{ comment.id }}" data-id="{{ comment.id }}" >
                     {{ comment.likes }}
                 </span>
 
@@ -76,19 +78,19 @@
 
     <script>
         $(document).ready(function() {
-            $("#like").bind("click", function(event) {
+            $("#like"+{{ comment.id }}).bind("click", function(event) {
                 $.ajax({
                     url: "/index.php?controller=comments&action=like&id={{ comment.id }}",
                     type: "GET",
-                    data: ($("#like").attr("data-id")),
+                    data: ($("#like"+{{ comment.id }}).attr("data-id")),
                     dataType: "text",
                     success: function(result) {
                         if (result) {
 
-                            $("#like").text(result);
+                            $("#like"+{{ comment.id }}).text(result);
 
                         }
-                        else $("#like").text('?');
+                        else $("#like"+{{ comment.id }}).text('?');
                     }
                 });
             });

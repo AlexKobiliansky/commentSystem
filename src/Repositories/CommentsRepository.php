@@ -145,4 +145,30 @@ class CommentsRepository
         return $statement->execute();
     }
 
+    public function checkCounter(array $data)
+    {
+        $statement = $this->connector->getPdo()->prepare("SELECT * FROM likes WHERE comment_id = :commentId AND user_id = :userId");
+        $statement->bindValue(':commentId', (int) $data['comment_id'], \PDO::PARAM_INT);
+        $statement->bindValue(':userId', (int) $data['user_id'], \PDO::PARAM_INT);
+        $statement->execute();
+
+        if ($statement->fetch()) {
+            $statement = $this->connector->getPdo()->prepare("DELETE FROM likes WHERE comment_id = :commentId AND user_id = :userId");
+            $statement->bindValue(':commentId', (int) $data['comment_id'], \PDO::PARAM_INT);
+            $statement->bindValue(':userId', (int) $data['user_id'], \PDO::PARAM_INT);
+            $statement->execute();
+
+            return false;
+        }
+        else {
+            $statement = $this->connector->getPdo()->prepare("INSERT INTO likes (comment_id, user_id) VALUES (:commentId, :userId)");
+        $statement->bindValue(':commentId', (int) $data['comment_id'], \PDO::PARAM_INT);
+        $statement->bindValue(':userId', (int) $data['user_id'], \PDO::PARAM_INT);
+        $statement->execute();
+
+        return true;
+        }
+
+    }
+
 }

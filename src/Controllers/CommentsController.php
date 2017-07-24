@@ -121,7 +121,14 @@ class CommentsController
     {
 
     $comment = $this->repository->find($_GET['id']);
-    $likes = $comment->getLikes()+1;
+
+    if ($this->repository->checkCounter([
+        'comment_id' => $_GET['id'],
+        'user_id'    =>$_SESSION['user_id'],
+    ]))
+        $likes = $comment->getLikes()+1;
+    else
+        $likes = $comment->getLikes()-1;
 
     $this->repository->update([
             'content' => $comment->getContent(),

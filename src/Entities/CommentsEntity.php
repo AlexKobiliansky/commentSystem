@@ -21,12 +21,15 @@ Class CommentsEntity
 
     protected $children;
 
+    protected $liked_users;
+
     protected $likes = 0;
 
 
     public function __construct()
     {
         $this->children = [];
+        $this->liked_users = [];
     }
 
 
@@ -149,6 +152,20 @@ Class CommentsEntity
     public function getLikes()
     {
         return $this->likes;
+    }
+
+    public function addLikedUser($liked_user)
+    {
+
+        $this->liked_users[] = $liked_user;
+
+
+        return $this;
+    }
+
+    public function getLikedUsers()
+    {
+        return $this->liked_users;
     }
 }
 
