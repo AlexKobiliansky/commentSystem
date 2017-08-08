@@ -25,7 +25,6 @@ class CommentsController
     public function indexAction()
     {
         $commentsData = $this->repository->findAll();
-
         return $this->twig->render('comments.html.twig', [
             'comments' => $commentsData,
             'current_user' => $_SESSION['user_id'],

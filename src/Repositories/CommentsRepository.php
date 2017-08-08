@@ -37,6 +37,10 @@ class CommentsRepository
             $children->bindValue(':parent', (int) $result['id'], \PDO::PARAM_INT);
             $children->execute();
 
+            $likedUsers = $this->connector->getPdo()->prepare('SELECT l.user_id FROM user u, likes l, comments c WHERE u.id=l.user_id AND l.comment_id=c.id AND c.id = :commentId');
+            $likedUsers->bindValue(':commentId', (int) $result['id'], \PDO::PARAM_INT);
+            $likedUsers->execute();
+
             $results[] =
                 $object->setId($result['id']);
             $object->setContent($result['content']);
@@ -47,6 +51,11 @@ class CommentsRepository
             $object->setLikes($result['likes']);
             $object->setDateCreated($result['date_created']);
 
+
+            while ($user = $likedUsers->fetch()) {
+                $object->addLikedUser($user['user_id']);
+            }
+
             while ($child = $children->fetch()) {
                 $childObject = new \Entities\CommentsEntity;
 
@@ -54,6 +63,10 @@ class CommentsRepository
                         FROM comments c INNER JOIN user u ON u.id = c.user_id AND c.parent = :parent');
                 $children1->bindValue(':parent', (int) $child['id'], \PDO::PARAM_INT);
                 $children1->execute();
+
+                $likedUsers1 = $this->connector->getPdo()->prepare('SELECT l.user_id FROM user u, likes l, comments c WHERE u.id=l.user_id AND l.comment_id=c.id AND c.id = :commentId');
+                $likedUsers1->bindValue(':commentId', (int) $child['id'], \PDO::PARAM_INT);
+                $likedUsers1->execute();
 
                 $childObject->setId($child['id']);
                 $childObject->setContent($child['content']);
@@ -64,8 +77,16 @@ class CommentsRepository
                 $childObject->setLikes($child['likes']);
                 $childObject->setDateCreated($child['date_created']);
 
+                while ($user1 = $likedUsers1->fetch()) {
+                    $childObject->addLikedUser($user1['user_id']);
+                }
+
                 while ($child1 = $children1->fetch()) {
                     $childObject1 = new \Entities\CommentsEntity;
+
+                    $likedUsers2 = $this->connector->getPdo()->prepare('SELECT l.user_id FROM user u, likes l, comments c WHERE u.id=l.user_id AND l.comment_id=c.id AND c.id = :commentId');
+                    $likedUsers2->bindValue(':commentId', (int) $child1['id'], \PDO::PARAM_INT);
+                    $likedUsers2->execute();
 
                     $childObject1->setId($child1['id']);
                     $childObject1->setContent($child1['content']);
@@ -76,12 +97,18 @@ class CommentsRepository
                     $childObject1->setLikes($child1['likes']);
                     $childObject1->setDateCreated($child1['date_created']);
 
+                    while ($user2 = $likedUsers2->fetch()) {
+                        $childObject1->addLikedUser($user2['user_id']);
+                    }
+
                     $childObject->addChild($childObject1);
                 }
 
                 $object->addChild($childObject);
             }
         }
+
+
 
         return $results;
     }

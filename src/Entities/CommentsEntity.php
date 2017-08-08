@@ -21,7 +21,7 @@ class CommentsEntity
 
     protected $children;
 
-    protected $liked_users;
+    protected $likers;
 
     protected $likes;
 
@@ -29,7 +29,7 @@ class CommentsEntity
     public function __construct()
     {
         $this->children = [];
-        $this->liked_users = [];
+        $this->likers = [];
     }
 
     public function setId($id)
@@ -152,13 +152,13 @@ class CommentsEntity
 
     public function addLikedUser($liked_user)
     {
-        $this->liked_users[] = $liked_user;
+        $this->likers[] = $liked_user;
 
         return $this;
     }
 
-    public function getLikedUsers()
+    public function getLikedUser()
     {
-        return $this->liked_users;
+        return $this->likers;
     }
 }

@@ -44,9 +44,14 @@
                 <div class="likes_counter">
                     <input type="button" class="button btn btn-default btn-xs" value="Answer" onClick='$("#form"+{{ comment.id }}).show()'>
                     <span class="counter">
-                        <span class="glyphicon glyphicon-heart" id="like_hart{{ comment.id }}" style="color:lightblue"></span>
-                        <span class="badge">
-                            <span style="cursor: pointer;" id="like{{ comment.id }}" data-id="{{ comment.id }}" >
+                        {% if current_user in comment.LikedUser %}
+                            {% set hartColor = "steelblue" %}
+                        {% else %}
+                            {% set hartColor = "lightblue" %}
+                        {% endif %}
+                        <span id="likesCounter{{ comment.id }}" style="cursor: pointer;">
+                            <span class="glyphicon glyphicon-heart" id="like_hart{{ comment.id }}" style="color:{{ hartColor }}"></span>
+                            <span class="badge"  id="like{{ comment.id }}" data-id="{{ comment.id }}">
                                 {{ comment.likes }}
                             </span>
                         </span>
@@ -68,7 +73,7 @@
         {% endif %}
         <script>
             $(document).ready(function() {
-                $("#like"+{{ comment.id }}).bind("click", function(event) {
+                $("#likesCounter"+{{ comment.id }}).bind("click", function(event) {
                     $.ajax({
                         url: "/index.php?controller=comments&action=like&id={{ comment.id }}",
                         type: "GET",

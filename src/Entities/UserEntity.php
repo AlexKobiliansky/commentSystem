@@ -11,6 +11,13 @@ class UserEntity
 
     protected $avatar;
 
+    protected $liked_comments;
+
+    public function __construct()
+    {
+        $this->liked_comments = [];
+    }
+
     public function setId($id)
     {
         $this->id = $id;
@@ -45,5 +52,17 @@ class UserEntity
     public function getAvatar()
     {
         return $this->avatar;
+    }
+
+    public function addLikedComment($liked_comment)
+    {
+        $this->liked_comments[] = $liked_comment;
+
+        return $this;
+    }
+
+    public function getLikedComments()
+    {
+        return $this->liked_comments;
     }
 }
