@@ -11,11 +11,13 @@
             <label for="content">Comment:</label>
             <textarea class="form-control" id="content" name="content"></textarea>
         </div>
-        <button type="submit" class="btn btn-info btn-sm">Send comment</button>
+        <button type="submit" class="btn btn-info btn-sm" id="sendComment">Send comment</button>
     </form>
-    {% if not comments %}
-        There are no comments yet. Be the first...
-    {% endif %}
+
+
+    {% include 'comments_list.html.twig' with {'comments':comments} %}
+
+    {#<div id="comments" name="comments">
     {% for comment in comments %}
         {% if(comment.parent == null) %}
             <section class="comment">
@@ -72,6 +74,11 @@
             </div>
         {% endif %}
         <script>
+            function funcBefore() {
+                $("#comments").text("Ожидание данных...")
+            }
+
+
             $(document).ready(function() {
                 $("#likesCounter"+{{ comment.id }}).bind("click", function(event) {
                     $.ajax({
@@ -89,10 +96,43 @@
                         }
                     });
                 });
+
+
+            $("#sendComment").click(function(e) {
+                e.preventDefault(); //отменяет действие браузера по умолчанию
+
+                if ($("#content").val()==="")
+                {
+                    alert ("Enter your comment");
+                    return false;
+                }
+
+
+                $.ajax ({
+                    url: "/index.php?controller=comments&action=new",
+                    type: "POST",
+                    dataType: "text",
+                    beforeSend: funcBefore(),
+                    data: ({ content: $("#content").val()}),
+                    success: function(response) {
+                        $("#comments").html(response);
+                    },
+                    error:function (xhr, ajaxOptions, thrownError) {
+                        alert(thrownError);
+                    }
+                });
+            });
+
+
+
+
+
+
+
+
             });
         </script>
     {% endfor %}
-    <script>
-        $(".subcommentform").hide();
-    </script>
+    </div>#}
+
 {% endblock %}

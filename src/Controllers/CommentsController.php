@@ -33,14 +33,22 @@ class CommentsController
 
     public function newAction()
     {
+        sleep(1);
         if (!empty($_POST['content'])) {
+           // var_dump($_POST['content']);die();
             $this->repository->insert(
                 [
                     'content' => $_POST['content'],
                     'likes'   => 0,
                 ]);
 
-            return $this->indexAction();
+            $commentsData = $this->repository->findAll();
+
+            return $this->twig->render('comments_list.html.twig', [
+                'comments'     => $commentsData,
+                'current_user' => $_SESSION['user_id'],
+            ]);
+            //return $this->indexAction();
         }
 
         return $this->twig->render('comments.html.twig',
