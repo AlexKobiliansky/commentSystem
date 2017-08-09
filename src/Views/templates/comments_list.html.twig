@@ -4,7 +4,7 @@
     {% endif %}
     {% for comment in comments %}
         {% if(comment.parent == null) %}
-        <section class="comment">
+        <section class="comment" id="commentBlock{{ comment.id }}">
             {% if not comment.UserAvatar %}
                 <img src='/web/avatars/no_avatar.jpg'>
             {% else %}
@@ -15,9 +15,19 @@
                     <span id="login">{{ comment.UserLogin }}</span>
                     <span id="date">{{ comment.dateCreated|date('j.m.Y, G:i') }}</span>
                     {% if comment.UserId == current_user %}
+
+
+                        {#
                         <a href="/index.php?controller=comments&action=delete&id={{ comment.id }}&login={{ comment.UserLogin }}">
                             <span class="glyphicon glyphicon-remove"></span>
                         </a>
+                        #}
+
+                        <span id="deleteComment{{ comment.id }}" class="glyphicon glyphicon-remove" style="cursor: pointer" data-id="{{ comment.id }}"></span>
+
+
+
+
                         <a href="/index.php?controller=comments&action=edit&id={{ comment.id }}">
                             <span class="glyphicon glyphicon-edit"></span>
                         </a>
@@ -43,7 +53,7 @@
                         </span>
                     </span>
             </div>
-        </section>
+
         <div class="subcomment">
             <div class="subcommentform" id="form{{ comment.id }}">
                 <form method="POST" action="/index.php?controller=comments&action=createSubcomment&parent_id={{ comment.id }}">
@@ -79,8 +89,42 @@
                         }
                     });
                 });
+
+
+
+
+                $("#deleteComment"+{{ comment.id }}).bind("click", function(event) {
+                    $.ajax({
+                        url: "/index.php?controller=comments&action=delete&id={{ comment.id }}&login={{ comment.UserLogin }}",
+                        type: "GET",
+                        data: ($("#like"+{{ comment.id }}).attr("data-id")),
+                        dataType: "text",
+                        success: function(result) {
+                            if (result) {
+                                $('#commentBlock'+{{ comment.id}}).fadeOut("slow");
+                            }},
+                            error:function (xhr, ajaxOptions, thrownError){
+                                //выводим ошибку
+                                alert(thrownError);
+                            }
+
+                    });
+                });
+
+
+
+
+
+
+
+
+
+
+
+
             });
         </script>
+        </section>
     {% endfor %}
 
     <script>
