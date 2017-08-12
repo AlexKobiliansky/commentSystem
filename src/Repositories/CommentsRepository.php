@@ -108,8 +108,6 @@ class CommentsRepository
             }
         }
 
-
-
         return $results;
     }
 
@@ -130,8 +128,15 @@ class CommentsRepository
         $statement->bindValue(':content', $commentsData['content']);
         $statement->bindValue(':userId', (int) $_SESSION['user_id'], \PDO::PARAM_INT);
         $statement->bindValue(':likes', (int) $commentsData['likes'], \PDO::PARAM_INT);
+        $statement->execute();
 
-        return $statement->execute();
+
+        $statement = $this->connector->getPdo()->prepare('SELECT c.id, c.content, c.user_id, u.login, u.avatar, c.parent, c.likes, c.date_created
+            FROM comments c INNER JOIN user u ON u.id = c.user_id ORDER BY id DESC LIMIT 1');
+        $statement->execute();
+        $commentsData = $this->fetchCommentsData($statement);
+
+        return $commentsData[0];
     }
 
     public function update(array $commentsData)

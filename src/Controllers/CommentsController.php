@@ -35,30 +35,28 @@ class CommentsController
     {
         sleep(1);
         if (!empty($_POST['content'])) {
-           // var_dump($_POST['content']);die();
-            $this->repository->insert(
+            $comment = $this->repository->insert(
                 [
                     'content' => $_POST['content'],
                     'likes'   => 0,
                 ]);
 
-            $commentsData = $this->repository->findAll();
-
-            return $this->twig->render('comments_list.html.twig', [
-                'comments'     => $commentsData,
+            return $this->twig->render('comment_block.html.twig', [
+                'comment'     => $comment,
                 'current_user' => $_SESSION['user_id'],
             ]);
-            //return $this->indexAction();
         }
 
-        return $this->twig->render('comments.html.twig',
+        return "empty";
+        /*return $this->twig->render('comments.html.twig',
             [
                 'message' => 'You comment is empty. Please type something and try again',
-            ]);
+            ]);*/
     }
 
     public function editAction()
     {
+        sleep(1);
         if (isset($_POST['content'])) {
             $comment = $this->repository->find($_GET['id']);
             $likes = $comment->getLikes();

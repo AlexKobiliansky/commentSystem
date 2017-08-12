@@ -1,12 +1,7 @@
-{% extends 'base.html.twig' %}
-
-{% block content %}
     <h4>Updating your comment from <strong>{{ dateCreated|date('j.m.Y, G:i') }}</strong></h4>
     <form method="POST" action="/index.php?controller=comments&action=edit&id={{ id }}">
         <div class="form-group">
-            <label for="content">Comment</label>
             <textarea class="form-control" id="content" name="content">{{ content }}</textarea>
         </div>
         <button type="submit" class="btn btn-info btn-sm">Change comment</button>
     </form>
-{% endblock %}
