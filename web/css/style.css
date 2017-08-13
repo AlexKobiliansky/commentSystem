@@ -15,7 +15,7 @@
 .likes_counter .glyphicon {font-size: 19px; margin-top: 0; margin-left: 4px}
 
 
-
+/*styles for "toTop button"*/
 #toTop {
     position:fixed;
     bottom:50px;
@@ -24,5 +24,89 @@
     display:none;
     opacity: .4;
 }
+
+/*styles for file_upload section*/
+.file_upload{
+    position: relative;
+    overflow: hidden;
+    font-size: 1em;
+    height: 2em;
+    line-height: 2em
+}
+.file_upload > button, .file_upload > div{
+    cursor: pointer
+}
+.file_upload > button{
+    float: left;
+    width: 8em;
+    height: 100%;
+    font: 14px/1 "Helvetica Neue", "Helvetica", Helvetica,Arial, sans-serif;!important;
+}
+.file_upload > div{
+    position: absolute;
+    left: 9em;
+}
+@media only screen and ( max-width: 500px ){
+    .file_upload > div{
+        display: none
+    }
+    .file_upload > button{
+        width: 100%
+    }
+}
+.file_upload input[type=file]{
+    position: absolute;
+    top: 0;
+    visibility: hidden
+}
+
+.file_upload{
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    transition: box-shadow 0.1s linear
+}
+.file_upload.focus{
+    box-shadow: 0 0 5px rgba(0,30,255,0.4)
+}
+.file_upload > button{
+    background: #337ab7;
+    transition: background 0.2s;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+    border-radius: 2px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+    color: #fff;
+    text-shadow: #6200bd 0 -1px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+.file_upload:hover > button{
+    background: #286090;
+    text-shadow: #5d00b3 0 -1px 0
+
+}
+.file_upload:active > button{
+    background: #286090;
+    box-shadow: 0 0 3px rgba(0,0,0,0.3) inset
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

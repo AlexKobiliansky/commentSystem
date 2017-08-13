@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+{% block head %}
 <head>
     {% block stylesheets %}
         <link href ="/web/css/style.css" rel="stylesheet" />
@@ -15,12 +16,14 @@
         <script src="/web/js/bootstrap.min.js"></script>
         <script src="/web/js/script.js"></script>
         <script src="/web/js/toTopButton.js"></script>
+
     {% endblock %}
 
-    {% block head %}
+
         <title>Comments Board</title>
-    {% endblock %}
+
 </head>
+{% endblock %}
 <body>
     <div class="row">
         <div class="col-sm-3">
