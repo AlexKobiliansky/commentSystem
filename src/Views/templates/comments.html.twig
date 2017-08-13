@@ -12,12 +12,14 @@
             <textarea class="form-control" id="content" name="content"></textarea>
         </div>
         <button type="submit" class="btn btn-info btn-sm" id="sendComment">Send comment</button>
+
     </form>
     <div id="newCommentBlock"></div>
     {% include 'comments_list.html.twig' with {'comments':comments} %}
     <script>
         function funcBefore() {
             $("#newCommentBlock").text("Ожидание данных...")
+            $("#sendComment").prop('disabled', true);
         }
 
         $(document).ready(function() {
@@ -31,17 +33,20 @@
                     alert ("Enter your comment");
                     return false;
                 }
+
                 $.ajax ({
                     url: "/index.php?controller=comments&action=new",
                     type: "POST",
                     dataType: "text",
                     beforeSend: funcBefore(),
+                    //complete: funcAfter(),
                     data: content,
                     success: function(response) {
                         $("#comments").prepend(response);
                         $("#newCommentBlock").html("");
                         $("#content").val("");
                         $(".subcommentform").hide();
+                        $("#sendComment").prop('disabled', false);
                     },
                     error:function (xhr, ajaxOptions, thrownError) {
                         alert(thrownError);
@@ -51,5 +56,13 @@
         });
 
         $(".subcommentform").hide();
+
+        
+
+
+
+
+
+
     </script>
 {% endblock %}

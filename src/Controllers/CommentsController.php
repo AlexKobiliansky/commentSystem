@@ -57,13 +57,14 @@ class CommentsController
     public function editAction()
     {
         sleep(1);
-        if (isset($_POST['content'])) {
+        if (isset($_POST['commentContent'])) {
+
             $comment = $this->repository->find($_GET['id']);
             $likes = $comment->getLikes();
 
             $this->repository->update(
                 [
-                    'content' => $_POST['content'],
+                    'content' => $_POST['commentContent'],
                     'id'      => (int) $_GET['id'],
                     'likes'   => $likes
                 ]);
