@@ -1,5 +1,6 @@
     {% if(comment.parent == null) %}
         <section class="comment" id="commentBlock{{ comment.id }}">
+            <div class="delete" style="cursor: pointer">DELETE</div>
             {% if not comment.UserAvatar %}
                 <img src='/web/avatars/no_avatar.jpg'>
             {% else %}
@@ -47,6 +48,14 @@
                 {% include 'subcomments.html.twig' with {'comments':comment.children} %}
             </div>
         </section>
+
+
+
+
+
+
+
+
     {% endif %}
 
     <script>
@@ -73,6 +82,43 @@
             });
 
             $("#deleteComment"+{{ comment.id }}).bind("click", function(event) {
+
+
+                var elem = $(this).closest('.comment');
+
+                $.confirm({
+                    'comment_id' : "{{ comment.id }}",
+                    'UserLogin' : "{{ comment.UserLogin }}",
+                    'title'		: 'Подтверждение удаления',
+                    'message'	: 'Вы решили удалить пункт. <br />После удаления его нельзя будет восстановить! Продолжаем?',
+                    'buttons'	: {
+                        'Да'	: {
+                            'class'	: 'blue',
+                            'action': function(){
+                                $.ajax({
+                                    url: "/index.php?controller=comments&action=delete&id={{ comment.id }}&login={{ comment.UserLogin }}",
+                                    type: "GET",
+                                    data: ($("#deleteComment"+{{ comment.id }}).attr("data-id")),
+                                    dataType: "text",
+                                    success: function(result) {
+                                        if (result) {
+                                            $('#commentBlock'+{{ comment.id}}).fadeOut("slow");
+                                        }},
+                                    error:function (xhr, ajaxOptions, thrownError){
+                                        alert(thrownError);
+                                    }
+                                });
+                                //elem.slideUp();
+                            }
+                        },
+                        'Нет'	: {
+                            'class'	: 'gray',
+                            'action': function(){}	// В данном случае ничего не делаем. Данную опцию можно просто опустить.
+                        }
+                    }
+                });
+
+                /*
                 $.ajax({
                     url: "/index.php?controller=comments&action=delete&id={{ comment.id }}&login={{ comment.UserLogin }}",
                     type: "GET",
@@ -85,7 +131,7 @@
                     error:function (xhr, ajaxOptions, thrownError){
                         alert(thrownError);
                     }
-                });
+                });*/
             });
 
             $("#updateComment"+{{ comment.id }}).bind("click", function(event) {
@@ -104,5 +150,40 @@
                     }
                 });
             });
+
+
+
+
+
+
+            $('.comment .delete').click(function(){
+
+                var elem = $(this).closest('.comment');
+
+                $.confirm({
+                    'title'		: 'Подтверждение удаления',
+                    'message'	: 'Вы решили удалить пункт. <br />После удаления его нельзя будет восстановить! Продолжаем?',
+                    'buttons'	: {
+                        'Да'	: {
+                            'class'	: 'blue',
+                            'action': function(){
+                                elem.slideUp();
+                            }
+                        },
+                        'Нет'	: {
+                            'class'	: 'gray',
+                            'action': function(){}	// В данном случае ничего не делаем. Данную опцию можно просто опустить.
+                        }
+                    }
+                });
+
+            });
+
+
+
+
+
+
+
         });
     </script>

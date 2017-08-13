@@ -16,3 +16,13 @@
 
 
 
+#toTop {
+    position:fixed;
+    bottom:50px;
+    right:100px;
+    cursor:pointer;
+    display:none;
+    opacity: .4;
+}
+
+

@@ -16,6 +16,26 @@
     </form>
     <div id="newCommentBlock"></div>
     {% include 'comments_list.html.twig' with {'comments':comments} %}
+
+
+
+    {#всплывающее окно
+    <div id="confirmOverlay">
+        <div id="confirmBox">
+            <h1>Заголовок окна</h1>
+            <p>Описание процесса</p>
+            <div id="confirmButtons">
+                <a class="button blue" href="#">Да<span></span></a>
+                <a class="button gray" href="#">Нет<span></span></a>
+            </div>
+        </div>
+    </div>
+    #}
+    <div id="toTop"><img src="/web/images/toTop.png"></div>
+
+
+
+
     <script>
         function funcBefore() {
             $("#newCommentBlock").text("Ожидание данных...")
@@ -57,7 +77,7 @@
 
         $(".subcommentform").hide();
 
-        
+
 
 
 
