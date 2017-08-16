@@ -25,6 +25,8 @@ class CommentsEntity
 
     protected $likes;
 
+    protected $is_last_child;
+
 
     public function __construct()
     {
@@ -160,5 +162,15 @@ class CommentsEntity
     public function getLikedUser()
     {
         return $this->likers;
+    }
+
+    public function setLastChild($is_last_child)
+    {
+        $this->is_last_child = $is_last_child;
+    }
+
+    public function getLastChild()
+    {
+        return $this->is_last_child;
     }
 }

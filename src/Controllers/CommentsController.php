@@ -24,7 +24,7 @@ class CommentsController
 
     public function indexAction()
     {
-        $commentsData = $this->repository->findAll();
+        $commentsData = $this->repository->findAll(); //var_dump($commentsData);die();
         return $this->twig->render('comments.html.twig', [
             'comments' => $commentsData,
             'current_user' => $_SESSION['user_id'],
@@ -71,7 +71,10 @@ class CommentsController
 
             $comment = $this->repository->find((int) $_GET['id']);
             return $this->twig->render('comment_block.html.twig',
-                ['comment' => $comment]);
+                [
+                    'comment' => $comment,
+                    'current_user' => $_SESSION['user_id'],
+                ]);
         }
 
         $comment = $this->repository->find((int) $_GET['id']);

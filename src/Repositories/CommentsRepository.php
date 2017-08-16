@@ -96,6 +96,7 @@ class CommentsRepository
                     $childObject1->setParent($child1['parent']);
                     $childObject1->setLikes($child1['likes']);
                     $childObject1->setDateCreated($child1['date_created']);
+                    $childObject1->setLastChild("true");
 
                     while ($user2 = $likedUsers2->fetch()) {
                         $childObject1->addLikedUser($user2['user_id']);

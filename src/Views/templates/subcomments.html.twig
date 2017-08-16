@@ -23,7 +23,10 @@
             <p>{{ comment.content }}</p>
         </div>
         <div class="likes_counter">
+            {% if not comment.getLastChild %}
             <input type="button" class="button btn btn-default btn-xs" value="Answer" onClick='$("#form"+{{ comment.id }}).show()'>
+
+                {% endif %}
             <span class="counter">
                  {% if current_user in comment.LikedUser %}
                      {% set hartColor = "steelblue" %}

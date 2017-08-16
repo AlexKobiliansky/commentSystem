@@ -1,15 +1,17 @@
 
-.comment {padding: 20px; border-top: 1px dotted #ccc}
+.comment {padding: 10px 20px 20px 20px;  border-top: 1px dotted #ccc}
 .comment .comment-header {padding: 5px; border-bottom: 1px dotted #ccc; overflow: hidden}
+.comment-header > p, .comment-content > p {margin:0}
 .comment .comment-content {padding: 20px 0 0 0; margin-left:68px}
 .comment #login {font-weight:bold}
 .comment #date {font-size: 0.8em; margin-left: 10px; color: #999999}
 .comment .button{margin:10px 0 0  68px;}
-.comment img{float: left; width: 50px; padding: 3px; border: 1px solid #ccc; margin: 0 10px 10px 0 }
+.comment img{float: left; width: 50px; height: 50px; padding: 3px; border: 1px solid #ccc; margin: 0 10px 10px 0 }
 .glyphicon {float:right; font-size: 16px; margin:0 0 0 10px; color: #1b6d85 }
 
-.subcomment{margin-left: 100px}
-.subcomment > .comment{padding: 20px 20px 20px 0}
+.subcomment{margin-left: 70px}
+.subcomment > .comment{padding: 10px 0 0 0; margin-top:10px}
+.subcommentform {margin-top: 10px}
 #newcomment {margin-bottom: 30px;}
 .counter {float: right; margin:10px 0 1px 10px}
 .likes_counter .glyphicon {font-size: 19px; margin-top: 0; margin-left: 4px}
