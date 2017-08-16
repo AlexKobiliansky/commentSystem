@@ -1,19 +1,36 @@
-<h4>Updating your comment from <strong>{{ dateCreated|date('j.m.Y, G:i') }}</strong></h4>
-<div id="message1"></div>
-<form method="POST" action="/index.php?controller=comments&action=edit&id={{ id }}">
+<section id="updatingComment{{ id }}">
+    <h4>Updating your comment from <strong>{{ dateCreated|date('j.m.Y, G:i') }}</strong></h4>
+    <div id="message{{ id }}"></div>
+    <form method="POST" action="/index.php?controller=comments&action=edit&id={{ id }}">
+        <div class="form-group">
+            <textarea class="form-control" id="commentContent" name="commentContent">{{ content }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-info btn-sm" id="changeComment">Change comment</button>
+    </form>
 
-    <div class="form-group">
-        <textarea class="form-control" id="commentContent" name="commentContent">{{ content }}</textarea>
-    </div>
-    <button type="submit" class="btn btn-info btn-sm" id="changeComment">Change comment</button>
-</form>
+    <script>
+        $("#changeComment").click(function(e) {
+            e.preventDefault();
+            var content = "commentContent="+ $("#commentContent").val();
 
-<script>
-    $("#changeComment").click(function(e) {
+            if ($("#commentContent").val() === "") {
+                $("#message"+{{ id }}).html("Enter your comment");
+                return false;
+            }
 
-        if ($("#commentContent").val() === "") {
-            $("#message1").html("Enter your comment");
-            return false;
-        }
-    });
-</script>
+            $.ajax ({
+                url: "/index.php?controller=comments&action=edit&id={{ id }}",
+                type: "POST",
+                dataType: "text",
+                data: content,
+                success: function(response) {
+                    $("#commentBlock"+{{ id }}).replaceWith(response);
+                    $(".subcommentform").hide();
+                },
+                error:function (xhr, ajaxOptions, thrownError) {
+                    alert(thrownError);
+                }
+            });
+        });
+    </script>
+</section>

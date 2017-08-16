@@ -77,7 +77,7 @@ class UserRepository
         } elseif (empty($confirmPassword) || ($password !== $confirmPassword)) {
             return 'Mismatch passwords. Please check and try again';
         } else {
-            if (!preg_match("/^[a-zа-яё\d]{1,}$/i", $login)) {
+            if (!preg_match("/^[a-zа-яё\d]{1,}$/iu", $login)) {
                 return 'You login may consist only alphabetic and numeric characters without spaces ';
             } elseif (!preg_match("/^[a-zа-яё\d]{1,}$/i", $password)) {
                 return 'You password may consist only alphabetic and numeric characters without spaces ';

@@ -69,7 +69,9 @@ class CommentsController
                     'likes'   => $likes
                 ]);
 
-            return $this->indexAction();
+            $comment = $this->repository->find((int) $_GET['id']);
+            return $this->twig->render('comment_block.html.twig',
+                ['comment' => $comment]);
         }
 
         $comment = $this->repository->find((int) $_GET['id']);

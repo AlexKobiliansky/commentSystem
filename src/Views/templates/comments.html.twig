@@ -12,29 +12,10 @@
             <textarea class="form-control" id="content" name="content"></textarea>
         </div>
         <button type="submit" class="btn btn-info btn-sm" id="sendComment">Send comment</button>
-
     </form>
     <div id="newCommentBlock"></div>
     {% include 'comments_list.html.twig' with {'comments':comments} %}
-
-
-
-    {#всплывающее окно
-    <div id="confirmOverlay">
-        <div id="confirmBox">
-            <h1>Заголовок окна</h1>
-            <p>Описание процесса</p>
-            <div id="confirmButtons">
-                <a class="button blue" href="#">Да<span></span></a>
-                <a class="button gray" href="#">Нет<span></span></a>
-            </div>
-        </div>
-    </div>
-    #}
     <div id="toTop"><img src="/web/images/toTop.png"></div>
-
-
-
 
     <script>
         function funcBefore() {
@@ -44,7 +25,7 @@
 
         $(document).ready(function() {
             $("#sendComment").click(function(e) {
-                e.preventDefault(); //отменяет действие браузера по умолчанию
+                e.preventDefault();
 
                 var content = "content="+ $("#content").val();
 
@@ -59,7 +40,6 @@
                     type: "POST",
                     dataType: "text",
                     beforeSend: funcBefore(),
-                    //complete: funcAfter(),
                     data: content,
                     success: function(response) {
                         $("#comments").prepend(response);
@@ -76,13 +56,5 @@
         });
 
         $(".subcommentform").hide();
-
-
-
-
-
-
-
-
     </script>
 {% endblock %}
