@@ -47,6 +47,7 @@
                         $("#content").val("");
                         $(".subcommentform").hide();
                         $("#sendComment").prop('disabled', false);
+                        $(".empty").html("")
                     },
                     error:function (xhr, ajaxOptions, thrownError) {
                         alert(thrownError);

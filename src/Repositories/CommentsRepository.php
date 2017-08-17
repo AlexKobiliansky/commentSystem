@@ -33,7 +33,7 @@ class CommentsRepository
             $object = new \Entities\CommentsEntity;
 
             $children = $this->connector->getPdo()->prepare('SELECT c.id, c.content, c.user_id, u.login, u.avatar, c.parent, c.likes, c.date_created 
-                FROM comments c INNER JOIN user u ON u.id = c.user_id AND c.parent = :parent');
+                FROM comments c INNER JOIN user u ON u.id = c.user_id AND c.parent = :parent ORDER BY c.id DESC');
             $children->bindValue(':parent', (int) $result['id'], \PDO::PARAM_INT);
             $children->execute();
 
@@ -60,7 +60,7 @@ class CommentsRepository
                 $childObject = new \Entities\CommentsEntity;
 
                 $children1 = $this->connector->getPdo()->prepare('SELECT c.id, c.content, c.user_id, u.login, u.avatar, c.parent, c.likes, c.date_created 
-                        FROM comments c INNER JOIN user u ON u.id = c.user_id AND c.parent = :parent');
+                        FROM comments c INNER JOIN user u ON u.id = c.user_id AND c.parent = :parent ORDER BY c.id DESC');
                 $children1->bindValue(':parent', (int) $child['id'], \PDO::PARAM_INT);
                 $children1->execute();
 

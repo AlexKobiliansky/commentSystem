@@ -24,7 +24,7 @@ class CommentsController
 
     public function indexAction()
     {
-        $commentsData = $this->repository->findAll(); //var_dump($commentsData);die();
+        $commentsData = $this->repository->findAll();
         return $this->twig->render('comments.html.twig', [
             'comments' => $commentsData,
             'current_user' => $_SESSION['user_id'],
@@ -33,7 +33,6 @@ class CommentsController
 
     public function newAction()
     {
-        sleep(1);
         if (!empty($_POST['content'])) {
             $comment = $this->repository->insert(
                 [
@@ -48,17 +47,11 @@ class CommentsController
         }
 
         return "empty";
-        /*return $this->twig->render('comments.html.twig',
-            [
-                'message' => 'You comment is empty. Please type something and try again',
-            ]);*/
     }
 
     public function editAction()
     {
-        sleep(1);
         if (isset($_POST['commentContent'])) {
-
             $comment = $this->repository->find($_GET['id']);
             $likes = $comment->getLikes();
 
@@ -70,7 +63,7 @@ class CommentsController
                 ]);
 
             $comment = $this->repository->find((int) $_GET['id']);
-            return $this->twig->render('comment_block.html.twig',
+            return $this->twig->render('comment_block_self.html.twig',
                 [
                     'comment' => $comment,
                     'current_user' => $_SESSION['user_id'],

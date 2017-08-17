@@ -1,8 +1,10 @@
 <div id="comments" name="comments">
     {% if not comments %}
-        There are no comments yet. Be the first...
+        <span class="empty">There are no comments yet. Be the first...</span>
     {% endif %}
     {% for comment in comments %}
-        {% include 'comment_block.html.twig' with {'comment':comment} %}
+        {% if(comment.parent == null) %}
+                {% include 'comment_block.html.twig' with {'comment':comment} %}
+        {% endif %}
     {% endfor %}
 </div>
